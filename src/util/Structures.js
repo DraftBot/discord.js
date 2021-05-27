@@ -20,6 +20,7 @@
  * * **`Role`**
  * * **`User`**
  * * **`CommandInteraction`**
+ * * **`ComponentInteraction`**
  * @typedef {string} ExtendableStructure
  */
 
@@ -111,6 +112,7 @@ const structures = {
   Role: require('../structures/Role'),
   User: require('../structures/User'),
   CommandInteraction: require('../structures/CommandInteraction'),
+  ComponentInteraction: require('../structures/ComponentInteraction'),
 };
 
 module.exports = Structures;

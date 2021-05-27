@@ -25,16 +25,32 @@ declare enum InteractionResponseTypes {
   PONG = 1,
   CHANNEL_MESSAGE_WITH_SOURCE = 4,
   DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5,
+  DEFERRED_MESSAGE_UPDATE = 6,
+  UPDATE_MESSAGE = 7,
 }
 
 declare enum InteractionTypes {
   PING = 1,
   APPLICATION_COMMAND = 2,
+  MESSAGE_COMPONENT = 3,
 }
 
 declare enum InviteTargetType {
   STREAM = 1,
   EMBEDDED_APPLICATION = 2,
+}
+
+declare enum MessageButtonStyles {
+  PRIMARY = 1,
+  SECONDARY = 2,
+  SUCCESS = 3,
+  DANGER = 4,
+  LINK = 5,
+}
+
+declare enum MessageComponentTypes {
+  ACTION_ROW = 1,
+  BUTTON = 2,
 }
 
 declare enum OverwriteTypes {
@@ -52,14 +68,15 @@ declare module 'discord.js' {
   import BaseCollection from '@discordjs/collection';
   import { ChildProcess } from 'child_process';
   import {
-    ApplicationCommandOptionType as ApplicationCommandOptionTypes,
-    ApplicationCommandPermissionType as ApplicationCommandPermissionTypes,
     APIInteractionDataResolvedChannel as RawInteractionDataResolvedChannel,
     APIInteractionDataResolvedGuildMember as RawInteractionDataResolvedGuildMember,
     APIInteractionGuildMember as RawInteractionGuildMember,
     APIMessage as RawMessage,
     APIOverwrite as RawOverwrite,
+    APIPartialEmoji as RawEmoji,
     APIRole as RawRole,
+    ApplicationCommandOptionType as ApplicationCommandOptionTypes,
+    ApplicationCommandPermissionType as ApplicationCommandPermissionTypes,
   } from 'discord-api-types/v8';
   import { EventEmitter } from 'events';
   import { PathLike } from 'fs';
@@ -244,6 +261,19 @@ declare module 'discord.js' {
     public setRTCRegion(region: string | null): Promise<this>;
   }
 
+  export class BaseMessageComponent {
+    constructor(data?: BaseMessageComponent | BaseMessageComponentOptions);
+    public type: MessageComponentType | null;
+    public setType(type: MessageComponentTypeResolvable): this;
+    private static create(data: MessageComponentOptions): MessageComponent;
+    private static resolveType(type: MessageComponentTypeResolvable): MessageComponentType;
+    private static transform(component: MessageComponentResolvable): object;
+  }
+
+  interface BaseMessageComponentOptions {
+    type?: MessageComponentType | MessageComponentTypes;
+  }
+
   class BroadcastDispatcher extends VolumeMixin(StreamDispatcher) {
     public broadcast: VoiceBroadcast;
   }
@@ -265,6 +295,27 @@ declare module 'discord.js' {
     public [Symbol.iterator](): IterableIterator<S>;
     public static FLAGS: object;
     public static resolve(bit?: BitFieldResolvable<any, number | bigint>): number | bigint;
+  }
+
+  export class ComponentInteraction extends Interaction {
+    public customID: string;
+    public deferred: boolean;
+    public message: Message | RawMessage;
+    public replied: boolean;
+    public webhook: WebhookClient;
+    public defer(ephemeral?: boolean): Promise<void>;
+    public deleteReply(): Promise<void>;
+    public editReply(
+      content: string | APIMessage | WebhookEditMessageOptions | MessageEmbed | MessageEmbed[],
+    ): Promise<Message | RawMessage>;
+    public editReply(content: string, options?: WebhookEditMessageOptions): Promise<Message | RawMessage>;
+    public fetchReply(): Promise<Message | RawMessage>;
+    public followUp(
+      content: string | APIMessage | InteractionReplyOptions | MessageAdditions,
+    ): Promise<Message | RawMessage>;
+    public followUp(content: string, options?: InteractionReplyOptions): Promise<Message | RawMessage>;
+    public reply(content: string | APIMessage | InteractionReplyOptions | MessageAdditions): Promise<void>;
+    public reply(content: string, options?: InteractionReplyOptions): Promise<void>;
   }
 
   export class CategoryChannel extends GuildChannel {
@@ -647,6 +698,8 @@ declare module 'discord.js' {
     ApplicationCommandPermissionTypes: typeof ApplicationCommandPermissionTypes;
     InteractionTypes: typeof InteractionTypes;
     InteractionResponseTypes: typeof InteractionResponseTypes;
+    MessageComponentTypes: typeof MessageComponentTypes;
+    MessageButtonStyles: typeof MessageButtonStyles;
   };
 
   export class DataResolver {
@@ -1077,6 +1130,7 @@ declare module 'discord.js' {
     public user: User;
     public version: number;
     public isCommand(): this is CommandInteraction;
+    public isComponent(): this is ComponentInteraction;
   }
 
   export class Invite extends Base {
@@ -1116,6 +1170,7 @@ declare module 'discord.js' {
     public author: User;
     public channel: TextChannel | DMChannel | NewsChannel;
     public readonly cleanContent: string;
+    public components: MessageComponent[];
     public content: string;
     public readonly createdAt: Date;
     public createdTimestamp: number;
@@ -1185,6 +1240,14 @@ declare module 'discord.js' {
     public unpin(): Promise<Message>;
   }
 
+  export class MessageActionRow extends BaseMessageComponent {
+    constructor(data?: MessageActionRow | MessageActionRowOptions);
+    public type: 'ACTION_ROW';
+    public components: MessageComponent[];
+    public addComponent(component: MessageComponentOptions): this;
+    public addComponents(...components: MessageComponentOptions[] | MessageComponentOptions[][]): this;
+  }
+
   export class MessageAttachment {
     constructor(attachment: BufferResolvable | Stream, name?: string, data?: object);
 
@@ -1201,6 +1264,24 @@ declare module 'discord.js' {
     public setFile(attachment: BufferResolvable | Stream, name?: string): this;
     public setName(name: string): this;
     public toJSON(): object;
+  }
+
+  export class MessageButton extends BaseMessageComponent {
+    constructor(data?: MessageButton | MessageButtonOptions);
+    public customID: string | null;
+    public disabled: boolean;
+    public emoji: unknown | null;
+    public label: string | null;
+    public style: MessageButtonStyle | null;
+    public type: 'BUTTON';
+    public url: string | null;
+    public setCustomID(customID: string): this;
+    public setDisabled(disabled: boolean): this;
+    public setEmoji(emoji: EmojiIdentifierResolvable): this;
+    public setLabel(label: string): this;
+    public setStyle(style: MessageButtonStyleResolvable): this;
+    public setURL(url: string): this;
+    private static resolveStyle(style: MessageButtonStyleResolvable): MessageButtonStyle;
   }
 
   export class MessageCollector extends Collector<Snowflake, Message> {
@@ -3142,15 +3223,44 @@ declare module 'discord.js' {
 
   type MessageAdditions = MessageEmbed | MessageAttachment | (MessageEmbed | MessageAttachment)[];
 
+  interface MessageActionRowOptions extends BaseMessageComponentOptions {
+    type: 'ACTION_ROW' | MessageComponentTypes.ACTION_ROW;
+    components?: MessageComponentResolvable[];
+  }
+
   interface MessageActivity {
     partyID: string;
     type: number;
   }
 
+  interface MessageButtonOptions extends BaseMessageComponentOptions {
+    customID?: string;
+    disabled?: boolean;
+    emoji?: RawEmoji;
+    label?: string;
+    style: MessageButtonStyleResolvable;
+    type: 'BUTTON' | MessageComponentTypes.BUTTON;
+    url?: string;
+  }
+
+  type MessageButtonStyle = keyof typeof MessageButtonStyles;
+
+  type MessageButtonStyleResolvable = MessageButtonStyle | MessageButtonStyles | string | number;
+
   interface MessageCollectorOptions extends CollectorOptions {
     max?: number;
     maxProcessed?: number;
   }
+
+  type MessageComponent = BaseMessageComponent | MessageActionRow | MessageButton;
+
+  type MessageComponentOptions = BaseMessageComponentOptions | MessageActionRowOptions | MessageButtonOptions;
+
+  type MessageComponentResolvable = MessageComponent | MessageComponentOptions;
+
+  type MessageComponentType = keyof typeof MessageComponentTypes;
+
+  type MessageComponentTypeResolvable = MessageComponentType | MessageComponentTypes | string | number;
 
   interface MessageEditOptions {
     content?: StringResolvable;
@@ -3159,6 +3269,7 @@ declare module 'discord.js' {
     flags?: BitFieldResolvable<MessageFlagsString, number>;
     allowedMentions?: MessageMentionOptions;
     attachments?: MessageAttachment[];
+    components?: MessageComponentResolvable[];
   }
 
   interface MessageEmbedAuthor {
@@ -3251,6 +3362,7 @@ declare module 'discord.js' {
     nonce?: string | number;
     content?: StringResolvable;
     embed?: MessageEmbed | MessageEmbedOptions;
+    components?: MessageComponentResolvable[];
     allowedMentions?: MessageMentionOptions;
     files?: (FileOptions | BufferResolvable | Stream | MessageAttachment)[];
     code?: string | boolean;
