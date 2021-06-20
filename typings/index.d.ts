@@ -777,6 +777,7 @@ declare module 'discord.js' {
     public available: boolean;
     public banner: string | null;
     public bans: GuildBanManager;
+    public invites: GuildInvitesManager;
     public channels: GuildChannelManager;
     public commands: GuildApplicationCommandManager;
     public defaultMessageNotifications: DefaultMessageNotifications | number;
@@ -2389,6 +2390,16 @@ declare module 'discord.js' {
     public remove(user: UserResolvable, reason?: string): Promise<User>;
   }
 
+  export class GuildInvitesManager extends BaseManager<Snowflake, Invite, InviteResolvable> {
+    constructor(guild: Guild, iterable?: Iterable<any>);
+    public guild: Guild;
+    public create(options?: InviteOptions, channel?: ChannelResolvable): Promise<Invite>;
+    public create(channel?: ChannelResolvable): Promise<Invite>;
+    public fetch(options: InviteResolvable | FetchInviteOptions): Promise<Invite>;
+    public fetch(options?: FetchInvitesOptions): Promise<Collection<string, Invite>>;
+    public delete(invite: InviteResolvable, reason?: string): Promise<Invite>;
+  }
+
   export class GuildMemberRoleManager {
     constructor(member: GuildMember);
     public readonly cache: Collection<Snowflake, Role>;
@@ -3036,6 +3047,16 @@ declare module 'discord.js' {
   }
 
   interface FetchBansOptions {
+    cache: boolean;
+  }
+
+  interface FetchInviteOptions {
+    code: string;
+    cache?: boolean;
+    force?: boolean;
+  }
+
+  interface FetchInvitesOptions {
     cache: boolean;
   }
 
