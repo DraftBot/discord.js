@@ -42,7 +42,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/discordjs/discord.js.git"
+		"url": "https://github.com/DraftBot/discord.js.git"
 	},
 	"bugs": {
 		"url": "https://github.com/discordjs/discord.js/issues"
