@@ -2,8 +2,8 @@
 
 const process = require('node:process');
 const { deprecate } = require('node:util');
-const { makeURLSearchParams } = require('@discordjs/rest');
 const { isJSONEncodable } = require('@discordjs/util');
+const { makeURLSearchParams } = require('@draftbot/rest');
 const { InteractionResponseType, MessageFlags, Routes, InteractionType } = require('discord-api-types/v10');
 const { DiscordjsError, ErrorCodes } = require('../../errors');
 const MessageFlagsBitField = require('../../util/MessageFlagsBitField');
