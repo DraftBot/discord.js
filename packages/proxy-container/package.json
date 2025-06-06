@@ -46,7 +46,7 @@
 	"funding": "https://github.com/discordjs/discord.js?sponsor",
 	"dependencies": {
 		"@discordjs/proxy": "workspace:^",
-		"@discordjs/rest": "workspace:^",
+		"@discordjs/rest": "2.4.0",
 		"tslib": "^2.6.3"
 	},
 	"devDependencies": {

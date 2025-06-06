@@ -1,4 +1,4 @@
-import type { REST } from '@discordjs/rest';
+import type { REST } from '@draftbot/rest';
 import { range, type Awaitable } from '@discordjs/util';
 import { polyfillDispose } from '@discordjs/util';
 import { AsyncEventEmitter } from '@vladfrangu/async_event_emitter';

@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@discordjs/rest",
-	"version": "2.4.0",
+	"name": "@draftbot/rest",
+	"version": "2.4.0-1",
 	"description": "The REST API for discord.js",
 	"scripts": {
 		"test": "vitest run",

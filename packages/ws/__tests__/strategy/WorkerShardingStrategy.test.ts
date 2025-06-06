@@ -1,6 +1,6 @@
 /* eslint-disable id-length */
 import { setImmediate } from 'node:timers';
-import { REST } from '@discordjs/rest';
+import { REST } from '@draftbot/rest';
 import {
 	GatewayDispatchEvents,
 	GatewayOpcodes,

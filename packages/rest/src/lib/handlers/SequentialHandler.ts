@@ -335,6 +335,9 @@ export class SequentialHandler implements IHandler {
 		// Count the invalid requests
 		if (status === 401 || status === 403 || status === 429) {
 			incrementInvalidCount(this.manager);
+			if (status === 403) {
+				console.warn(`[FORBIDDEN] ${method.toUpperCase()} ${routeId.original}`, JSON.stringify(options.body));
+			}
 		}
 
 		if (res.ok) {
@@ -385,6 +388,15 @@ export class SequentialHandler implements IHandler {
 					`  Sublimit       : ${sublimitTimeout ? `${sublimitTimeout}ms` : 'None'}`,
 					`  Scope          : ${scope}`,
 				].join('\n'),
+			);
+
+			console.warn(
+				`[RATELIMIT] ${method.toUpperCase()} ${
+					routeId.original
+				} (Global: ${isGlobal.toString()}) (Limit: ${limit}) (Retry After: ${retryAfter}) (Reset After: ${Math.round(
+					timeout / 1_000,
+				)})`,
+				JSON.stringify(options.body),
 			);
 
 			// If caused by a sublimit, wait it out here so other requests on the route can be handled

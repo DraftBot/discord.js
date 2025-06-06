@@ -83,6 +83,10 @@ export async function makeNetworkRequest(
 			return null;
 		}
 
+		if (error.name === 'AbortError') {
+			console.error({ message: 'Request aborted', method: options.method, routeId, url, requestData, retries });
+		}
+
 		throw error;
 	} finally {
 		clearTimeout(timeout);

@@ -26,6 +26,7 @@ class InteractionResponses {
    * @typedef {Object} InteractionDeferReplyOptions
    * @property {boolean} [ephemeral] Whether the reply should be ephemeral
    * @property {boolean} [fetchReply] Whether to fetch the reply
+   * @property {boolean} [forceFollowUp] Whether to force followUp
    */
 
   /**
@@ -159,9 +160,27 @@ class InteractionResponses {
    */
   async editReply(options) {
     if (!this.deferred && !this.replied) throw new DiscordjsError(ErrorCodes.InteractionNotReplied);
+
+    options.components ??= [];
+
     const msg = await this.webhook.editMessage(options.message ?? '@original', options);
     this.replied = true;
     return msg;
+  }
+
+  /**
+   * Edits the initial reply to this interaction.
+   * @see Webhook#editMessage
+   * @param {string|MessagePayload|WebhookEditMessageOptions} options The new options for the message
+   * @returns {Promise<Message>}
+   * @example
+   * // Edit the reply to this interaction
+   * interaction.edit('New content')
+   *   .then(console.log)
+   *   .catch(console.error);
+   */
+  edit(options) {
+    return this.editReply(options);
   }
 
   /**
@@ -187,6 +206,38 @@ class InteractionResponses {
   followUp(options) {
     if (!this.deferred && !this.replied) return Promise.reject(new DiscordjsError(ErrorCodes.InteractionNotReplied));
     return this.webhook.send(options);
+  }
+
+  /**
+   * Send a follow-up message to this interaction.
+   * @param {string|MessagePayload|InteractionReplyOptions} [options] The options for the reply
+   * @returns {Promise<Message|APIMessage>}
+   */
+  send(options = {}) {
+    if (this.updated || options.forceFollowUp) return this.followUp(options);
+    if (this.deferred || this.replied) return this.editReply(options);
+
+    options.fetchReply = true;
+
+    return this.reply(options);
+  }
+
+  /**
+   * Send a follow-up embed message to this interaction.
+   * @param {Embed|APIEmbed} embed The embed for the reply
+   * @param {MessagePayload|InteractionReplyOptions|boolean} [options] The options for the reply
+   * @returns {Promise<Message>}
+   */
+  embed(embed, options = {}) {
+    if (typeof options === 'boolean') {
+      options = { ephemeral: options };
+    }
+
+    options.embeds = [embed];
+
+    if (this.updated || options.forceFollowUp) return this.followUp(options);
+    if (this.deferred || this.replied) return this.editReply(options);
+    return this.reply(options);
   }
 
   /**
@@ -243,6 +294,10 @@ class InteractionResponses {
       auth: false,
     });
     this.replied = true;
+
+    // Used to detect the impossibiliity to reply to the interaction in a new message,
+    // any editReply would be a editReply of the initial message
+    this.updated = true;
 
     return options.fetchReply ? this.fetchReply() : new InteractionResponse(this, this.message.interaction?.id);
   }
@@ -318,9 +373,12 @@ class InteractionResponses {
       'deferReply',
       'reply',
       'fetchReply',
+      'edit',
       'editReply',
       'deleteReply',
       'followUp',
+      'send',
+      'embed',
       'deferUpdate',
       'update',
       'showModal',

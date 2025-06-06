@@ -38,13 +38,13 @@ import {
 } from '@discordjs/formatters';
 import { Awaitable, JSONEncodable } from '@discordjs/util';
 import { Collection, ReadonlyCollection } from '@discordjs/collection';
-import { BaseImageURLOptions, ImageURLOptions, RawFile, REST, RESTOptions } from '@discordjs/rest';
+import { BaseImageURLOptions, ImageURLOptions, RawFile, REST, RESTOptions } from '@draftbot/rest';
 import {
   WebSocketManager as WSWebSocketManager,
   IShardingStrategy,
   IIdentifyThrottler,
   SessionInfo,
-} from '@discordjs/ws';
+} from '@draftbot/ws';
 import {
   APIActionRowComponent,
   APIApplicationCommandInteractionData,
@@ -588,12 +588,18 @@ export abstract class CommandInteraction<Cached extends CacheType = CacheType> e
   public editReply(
     options: string | MessagePayload | InteractionEditReplyOptions,
   ): Promise<Message<BooleanCache<Cached>>>;
+  public edit(options: string | MessagePayload | WebhookMessageEditOptions): Promise<Message<BooleanCache<Cached>>>;
   public fetchReply(message?: Snowflake | '@original'): Promise<Message<BooleanCache<Cached>>>;
   public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
+  public send(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
   public reply(options: InteractionReplyOptions & { fetchReply: true }): Promise<Message<BooleanCache<Cached>>>;
   public reply(
     options: string | MessagePayload | InteractionReplyOptions,
   ): Promise<InteractionResponse<BooleanCache<Cached>>>;
+  public embed(
+    embed: JSONEncodable<APIEmbed> | APIEmbed,
+    options?: Omit<InteractionReplyOptions, 'embeds'> | boolean,
+  ): Promise<Message>;
   public showModal(
     modal:
       | JSONEncodable<APIModalInteractionResponseCallbackData>
@@ -1423,7 +1429,7 @@ export class Entitlement extends Base {
 }
 
 export class Guild extends AnonymousGuild {
-  private constructor(client: Client<true>, data: RawGuildData);
+  constructor(client: Client<true>, data: RawGuildData);
   private _sortedRoles(): Collection<Snowflake, Role>;
   private _sortedChannels(channel: NonThreadGuildBasedChannel): Collection<Snowflake, NonThreadGuildBasedChannel>;
 
@@ -2135,7 +2141,7 @@ export interface MappedInteractionTypes<Cached extends boolean = boolean> {
 
 export class Message<InGuild extends boolean = boolean> extends Base {
   private readonly _cacheType: InGuild;
-  private constructor(client: Client<true>, data: RawMessageData);
+  constructor(client: Client<true>, data: RawMessageData);
   private _patch(data: RawPartialMessageData | RawMessageData): void;
 
   public activity: MessageActivity | null;
@@ -2193,9 +2199,28 @@ export class Message<InGuild extends boolean = boolean> extends Base {
   public createMessageComponentCollector<ComponentType extends MessageComponentType>(
     options?: MessageCollectorOptionsParams<ComponentType, InGuild>,
   ): InteractionCollector<MappedInteractionTypes<InGuild>[ComponentType]>;
-  public delete(): Promise<OmitPartialGroupDMChannel<Message<InGuild>>>;
+  public delete(timeout?: number): Promise<OmitPartialGroupDMChannel<Message<InGuild>>>;
   public edit(
     content: string | MessageEditOptions | MessagePayload,
+  ): Promise<OmitPartialGroupDMChannel<Message<InGuild>>>;
+  public replyEmbed(
+    embed: JSONEncodable<APIEmbed> | APIEmbed,
+    options?: Omit<MessageReplyOptions, 'embeds'>,
+  ): Promise<OmitPartialGroupDMChannel<Message<InGuild>>>;
+  public embed(
+    embed: JSONEncodable<APIEmbed> | APIEmbed,
+    options?: Omit<MessageCreateOptions, 'embeds'>,
+  ): Promise<OmitPartialGroupDMChannel<Message<InGuild>>>;
+  public send(
+    options: string | MessagePayload | MessageCreateOptions,
+  ): Promise<OmitPartialGroupDMChannel<Message<InGuild>>>;
+  public directEmbed(
+    embed: JSONEncodable<APIEmbed> | APIEmbed,
+    options?: Omit<MessageCreateOptions, 'embeds'>,
+  ): Promise<Message<false>>;
+  public replyMention(
+    content: string,
+    options: MessagePayload | Omit<MessageCreateOptions, 'content'>,
   ): Promise<OmitPartialGroupDMChannel<Message<InGuild>>>;
   public equals(message: Message, rawData: unknown): boolean;
   public fetchReference(): Promise<OmitPartialGroupDMChannel<Message<InGuild>>>;
@@ -2289,6 +2314,7 @@ export class MessageComponentInteraction<Cached extends CacheType = CacheType> e
   public ephemeral: boolean | null;
   public message: Message<BooleanCache<Cached>>;
   public replied: boolean;
+  public updated: boolean;
   public webhook: InteractionWebhook;
   public inGuild(): this is MessageComponentInteraction<'raw' | 'cached'>;
   public inCachedGuild(): this is MessageComponentInteraction<'cached'>;
@@ -2305,12 +2331,18 @@ export class MessageComponentInteraction<Cached extends CacheType = CacheType> e
   public editReply(
     options: string | MessagePayload | InteractionEditReplyOptions,
   ): Promise<Message<BooleanCache<Cached>>>;
+  public edit(options: string | MessagePayload | WebhookMessageEditOptions): Promise<Message<BooleanCache<Cached>>>;
   public fetchReply(message?: Snowflake | '@original'): Promise<Message<BooleanCache<Cached>>>;
   public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
+  public send(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
   public reply(options: InteractionReplyOptions & { fetchReply: true }): Promise<Message<BooleanCache<Cached>>>;
   public reply(
     options: string | MessagePayload | InteractionReplyOptions,
   ): Promise<InteractionResponse<BooleanCache<Cached>>>;
+  public embed(
+    embed: JSONEncodable<APIEmbed> | APIEmbed,
+    options?: Omit<InteractionReplyOptions, 'embeds'> | boolean,
+  ): Promise<Message<BooleanCache<Cached>>>;
   public update(options: InteractionUpdateOptions & { fetchReply: true }): Promise<Message<BooleanCache<Cached>>>;
   public update(
     options: string | MessagePayload | InteractionUpdateOptions,
@@ -2509,11 +2541,17 @@ export class ModalSubmitInteraction<Cached extends CacheType = CacheType> extend
   public ephemeral: boolean | null;
   public message: Message<BooleanCache<Cached>> | null;
   public replied: boolean;
+  public updated: boolean;
   public readonly webhook: InteractionWebhook;
+  public send(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
   public reply(options: InteractionReplyOptions & { fetchReply: true }): Promise<Message<BooleanCache<Cached>>>;
   public reply(
     options: string | MessagePayload | InteractionReplyOptions,
   ): Promise<InteractionResponse<BooleanCache<Cached>>>;
+  public embed(
+    embed: JSONEncodable<APIEmbed> | APIEmbed,
+    options?: Omit<InteractionReplyOptions, 'embeds'> | boolean,
+  ): Promise<Message<BooleanCache<Cached>>>;
   public deleteReply(message?: MessageResolvable | '@original'): Promise<void>;
   public editReply(
     options: string | MessagePayload | InteractionEditReplyOptions,
@@ -2522,6 +2560,7 @@ export class ModalSubmitInteraction<Cached extends CacheType = CacheType> extend
     options: InteractionDeferReplyOptions & { fetchReply: true },
   ): Promise<Message<BooleanCache<Cached>>>;
   public deferReply(options?: InteractionDeferReplyOptions): Promise<InteractionResponse<BooleanCache<Cached>>>;
+  public edit(options: string | MessagePayload | WebhookMessageEditOptions): Promise<Message<BooleanCache<Cached>>>;
   public fetchReply(message?: Snowflake | '@original'): Promise<Message<BooleanCache<Cached>>>;
   public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
   public deferUpdate(
@@ -2997,6 +3036,7 @@ export class ShardClientUtil {
 
   public client: Client;
   public get count(): number;
+  public get clusterId(): number;
   public get ids(): number[];
   public mode: ShardingManagerMode;
   public parentPort: MessagePort | null;
@@ -3163,6 +3203,15 @@ export class StickerPack extends Base {
   public skuId: Snowflake;
   public stickers: Collection<Snowflake, Sticker>;
   public bannerURL(options?: ImageURLOptions): string | null;
+}
+
+export class Structures extends null {
+  private constructor();
+  public static get<Key extends keyof Extendable>(structure: Key): Extendable[Key];
+  public static extend<Key extends keyof Extendable, Ext extends Extendable[Key]>(
+    structure: Key,
+    extender: () => Ext,
+  ): void;
 }
 
 export class Sweepers {
@@ -3894,24 +3943,24 @@ export enum DiscordjsErrorCodes {
   TokenMissing = 'TokenMissing',
   ApplicationCommandPermissionsTokenMissing = 'ApplicationCommandPermissionsTokenMissing',
 
-  /** @deprecated WebSocket errors are now handled in `@discordjs/ws` */
+  /** @deprecated WebSocket errors are now handled in `@draftbot/ws` */
   WSCloseRequested = 'WSCloseRequested',
-  /** @deprecated WebSocket errors are now handled in `@discordjs/ws` */
+  /** @deprecated WebSocket errors are now handled in `@draftbot/ws` */
   WSConnectionExists = 'WSConnectionExists',
-  /** @deprecated WebSocket errors are now handled in `@discordjs/ws` */
+  /** @deprecated WebSocket errors are now handled in `@draftbot/ws` */
   WSNotOpen = 'WSNotOpen',
   /** @deprecated No longer in use */
   ManagerDestroyed = 'ManagerDestroyed',
 
   BitFieldInvalid = 'BitFieldInvalid',
 
-  /** @deprecated This error is now handled in `@discordjs/ws` */
+  /** @deprecated This error is now handled in `@draftbot/ws` */
   ShardingInvalid = 'ShardingInvalid',
-  /** @deprecated This error is now handled in `@discordjs/ws` */
+  /** @deprecated This error is now handled in `@draftbot/ws` */
   ShardingRequired = 'ShardingRequired',
-  /** @deprecated This error is now handled in `@discordjs/ws` */
+  /** @deprecated This error is now handled in `@draftbot/ws` */
   InvalidIntents = 'InvalidIntents',
-  /** @deprecated This error is now handled in `@discordjs/ws` */
+  /** @deprecated This error is now handled in `@draftbot/ws` */
   DisallowedIntents = 'DisallowedIntents',
   ShardingNoShards = 'ShardingNoShards',
   ShardingInProcess = 'ShardingInProcess',
@@ -3964,9 +4013,9 @@ export enum DiscordjsErrorCodes {
 
   ReqResourceType = 'ReqResourceType',
 
-  /** @deprecated This error is now handled in `@discordjs/rest` */
+  /** @deprecated This error is now handled in `@draftbot/rest` */
   ImageFormat = 'ImageFormat',
-  /** @deprecated This error is now handled in `@discordjs/rest` */
+  /** @deprecated This error is now handled in `@draftbot/rest` */
   ImageSize = 'ImageSize',
 
   MessageBulkDeleteType = 'MessageBulkDeleteType',
@@ -4618,10 +4667,10 @@ export class ThreadManager<ThreadOnly extends boolean = boolean> extends CachedM
   public fetch(
     options: FetchThreadsOptions & { archived: FetchArchivedThreadOptions },
     cacheOptions?: { cache?: boolean },
-  ): Promise<FetchedThreadsMore>;
-  public fetch(options?: FetchThreadsOptions, cacheOptions?: { cache?: boolean }): Promise<FetchedThreads>;
-  public fetchArchived(options?: FetchArchivedThreadOptions, cache?: boolean): Promise<FetchedThreadsMore>;
-  public fetchActive(cache?: boolean): Promise<FetchedThreads>;
+  ): Promise<FetchedThreadsMore<ThreadOnly>>;
+  public fetch(options?: FetchThreadsOptions, cacheOptions?: { cache?: boolean }): Promise<FetchedThreads<ThreadOnly>>;
+  public fetchArchived(options?: FetchArchivedThreadOptions, cache?: boolean): Promise<FetchedThreadsMore<ThreadOnly>>;
+  public fetchActive(cache?: boolean): Promise<FetchedThreads<ThreadOnly>>;
 }
 
 export class GuildTextThreadManager<AllowedThreadType> extends ThreadManager<false> {
@@ -4682,7 +4731,12 @@ export class VoiceStateManager extends CachedManager<Snowflake, VoiceState, type
 export type Constructable<Entity> = abstract new (...args: any[]) => Entity;
 
 export interface PartialTextBasedChannelFields<InGuild extends boolean = boolean> {
+  get embedable(): boolean;
   send(options: string | MessagePayload | MessageCreateOptions): Promise<Message<InGuild>>;
+  embed(
+    embed: JSONEncodable<APIEmbed> | APIEmbed,
+    options?: Omit<MessageCreateOptions, 'embeds'>,
+  ): Promise<Message<InGuild>>;
 }
 
 export interface TextBasedChannelFields<InGuild extends boolean = boolean>
@@ -4773,6 +4827,7 @@ export type AllowedThreadTypeForNewsChannel = ChannelType.AnnouncementThread;
 export type AllowedThreadTypeForTextChannel = ChannelType.PublicThread | ChannelType.PrivateThread;
 
 export interface BaseApplicationCommandData {
+  id?: Snowflake;
   name: string;
   nameLocalizations?: LocalizationMap;
   dmPermission?: boolean;
@@ -5391,6 +5446,7 @@ export interface ClientFetchInviteOptions {
 }
 
 export interface ClientOptions {
+  clusterId?: number;
   shards?: number | readonly number[] | 'auto';
   shardCount?: number;
   closeTimeout?: number;
@@ -5423,10 +5479,10 @@ export interface ClientUserEditOptions {
 }
 
 export interface CloseEvent {
-  /** @deprecated Not used anymore since using {@link @discordjs/ws#(WebSocketManager:class)} internally */
+  /** @deprecated Not used anymore since using {@link @draftbot/ws#(WebSocketManager:class)} internally */
   wasClean: boolean;
   code: number;
-  /** @deprecated Not used anymore since using {@link @discordjs/ws#(WebSocketManager:class)} internally */
+  /** @deprecated Not used anymore since using {@link @draftbot/ws#(WebSocketManager:class)} internally */
   reason: string;
 }
 
@@ -5679,6 +5735,11 @@ export type EmojiIdentifierResolvable =
 
 export type EmojiResolvable = Snowflake | GuildEmoji | ReactionEmoji;
 
+interface Extendable {
+  Guild: typeof Guild;
+  Message: typeof Message;
+}
+
 export interface FetchApplicationCommandOptions extends BaseFetchOptions {
   guildId?: Snowflake;
   locale?: LocaleString;
@@ -5715,12 +5776,12 @@ export interface FetchChannelOptions extends BaseFetchOptions {
   allowUnknownGuild?: boolean;
 }
 
-export interface FetchedThreads {
-  threads: ReadonlyCollection<Snowflake, AnyThreadChannel>;
+export interface FetchedThreads<Forum extends boolean = boolean> {
+  threads: ReadonlyCollection<Snowflake, If<Forum, ForumThreadChannel, TextThreadChannel>>;
   members: ReadonlyCollection<Snowflake, ThreadMember>;
 }
 
-export interface FetchedThreadsMore extends FetchedThreads {
+export interface FetchedThreadsMore<Forum extends boolean = boolean> extends FetchedThreads<Forum> {
   hasMore: boolean;
 }
 
@@ -6299,6 +6360,7 @@ export interface InteractionReplyOptions extends BaseMessageOptions {
     Extract<MessageFlagsString, 'Ephemeral' | 'SuppressEmbeds' | 'SuppressNotifications'>,
     MessageFlags.Ephemeral | MessageFlags.SuppressEmbeds | MessageFlags.SuppressNotifications
   >;
+  forceFollowUp?: boolean;
 }
 
 export interface InteractionUpdateOptions extends MessageEditOptions {
@@ -7060,7 +7122,7 @@ export type Serialized<Value> = Value extends symbol | bigint | (() => any)
 //#region Voice
 
 /**
- * @internal Use `DiscordGatewayAdapterLibraryMethods` from `@discordjs/voice` instead.
+ * @internal Use `DiscordGatewayAdapterLibraryMethods` from `@draftbot/voice` instead.
  */
 export interface InternalDiscordGatewayAdapterLibraryMethods {
   onVoiceServerUpdate(data: GatewayVoiceServerUpdateDispatchData): void;
@@ -7069,7 +7131,7 @@ export interface InternalDiscordGatewayAdapterLibraryMethods {
 }
 
 /**
- * @internal Use `DiscordGatewayAdapterImplementerMethods` from `@discordjs/voice` instead.
+ * @internal Use `DiscordGatewayAdapterImplementerMethods` from `@draftbot/voice` instead.
  */
 export interface InternalDiscordGatewayAdapterImplementerMethods {
   sendPayload(payload: unknown): boolean;
@@ -7077,7 +7139,7 @@ export interface InternalDiscordGatewayAdapterImplementerMethods {
 }
 
 /**
- * @internal Use `DiscordGatewayAdapterCreator` from `@discordjs/voice` instead.
+ * @internal Use `DiscordGatewayAdapterCreator` from `@draftbot/voice` instead.
  */
 export type InternalDiscordGatewayAdapterCreator = (
   methods: InternalDiscordGatewayAdapterLibraryMethods,
@@ -7089,6 +7151,6 @@ export type InternalDiscordGatewayAdapterCreator = (
 export * from 'discord-api-types/v10';
 export * from '@discordjs/builders';
 export * from '@discordjs/formatters';
-export * from '@discordjs/rest';
+export * from '@draftbot/rest';
 export * from '@discordjs/util';
-export * from '@discordjs/ws';
+export * from '@draftbot/ws';

@@ -65,9 +65,9 @@
 	"homepage": "https://discord.js.org",
 	"funding": "https://github.com/discordjs/discord.js?sponsor",
 	"dependencies": {
-		"@discordjs/rest": "workspace:^",
+		"@discordjs/rest": "2.4.0",
 		"@discordjs/util": "workspace:^",
-		"@discordjs/ws": "workspace:^",
+		"@discordjs/ws": "2.0.0",
 		"@sapphire/snowflake": "^3.5.3",
 		"@vladfrangu/async_event_emitter": "^2.4.6",
 		"discord-api-types": "0.37.97"

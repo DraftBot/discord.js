@@ -70,6 +70,12 @@ class ModalSubmitInteraction extends BaseInteraction {
     this.replied = false;
 
     /**
+     * Whether this interaction has already been updated to
+     * @type {boolean}
+     */
+    this.updated = false;
+
+    /**
      * Whether the reply to this interaction is ephemeral
      * @type {?boolean}
      */

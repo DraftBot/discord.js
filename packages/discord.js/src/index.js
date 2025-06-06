@@ -44,6 +44,7 @@ exports.ShardEvents = require('./util/ShardEvents');
 exports.SKUFlagsBitField = require('./util/SKUFlagsBitField').SKUFlagsBitField;
 exports.Status = require('./util/Status');
 exports.SnowflakeUtil = require('@sapphire/snowflake').DiscordSnowflake;
+exports.Structures = require('./util/Structures');
 exports.Sweepers = require('./util/Sweepers');
 exports.SystemChannelFlagsBitField = require('./util/SystemChannelFlagsBitField');
 exports.ThreadMemberFlagsBitField = require('./util/ThreadMemberFlagsBitField');
@@ -227,7 +228,6 @@ exports.WelcomeScreen = require('./structures/WelcomeScreen');
 // External
 __exportStar(require('discord-api-types/v10'), exports);
 __exportStar(require('@discordjs/builders'), exports);
-__exportStar(require('@discordjs/formatters'), exports);
-__exportStar(require('@discordjs/rest'), exports);
+__exportStar(require('@draftbot/rest'), exports);
 __exportStar(require('@discordjs/util'), exports);
-__exportStar(require('@discordjs/ws'), exports);
+__exportStar(require('@draftbot/ws'), exports);

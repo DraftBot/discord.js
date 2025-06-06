@@ -82,6 +82,7 @@ function resolveGuildTemplateCode(data) {
  */
 async function resolveFile(resource) {
   if (Buffer.isBuffer(resource)) return { data: resource };
+  if (resource instanceof Object) return Buffer.from(resource);
 
   if (typeof resource[Symbol.asyncIterator] === 'function') {
     const buffers = [];

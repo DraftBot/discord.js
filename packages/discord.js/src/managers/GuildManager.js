@@ -3,7 +3,7 @@
 const process = require('node:process');
 const { setTimeout, clearTimeout } = require('node:timers');
 const { Collection } = require('@discordjs/collection');
-const { makeURLSearchParams } = require('@discordjs/rest');
+const { makeURLSearchParams } = require('@draftbot/rest');
 const { Routes, RouteBases } = require('discord-api-types/v10');
 const CachedManager = require('./CachedManager');
 const ShardClientUtil = require('../sharding/ShardClientUtil');

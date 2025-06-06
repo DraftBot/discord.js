@@ -366,12 +366,7 @@ export class CDN {
 	 */
 	private makeURL(
 		route: string,
-		{
-			allowedExtensions = ALLOWED_EXTENSIONS,
-			base = this.cdn,
-			extension = 'webp',
-			size,
-		}: Readonly<MakeURLOptions> = {},
+		{ allowedExtensions = ALLOWED_EXTENSIONS, base = this.cdn, extension = 'png', size }: Readonly<MakeURLOptions> = {},
 	): string {
 		// eslint-disable-next-line no-param-reassign
 		extension = String(extension).toLowerCase();

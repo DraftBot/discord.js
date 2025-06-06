@@ -8,10 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-    if: github.repository_owner == 'discordjs'
+    if: github.repository_owner == 'draftbot'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,7 +32,8 @@ jobs:
           tag: ${{ github.ref_name }}
 
       - name: Publish package
+        if: steps.extract-tag.outputs.subpackage == 'true'
         run: |
-          pnpm --filter=${{ steps.extract-tag.outputs.subpackage == 'true' && '@discordjs/' || '' }}${{ steps.extract-tag.outputs.package }} publish --provenance --no-git-checks
+          pnpm --filter=@draftbot/${{ steps.extract-tag.outputs.package }} publish --provenance --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}

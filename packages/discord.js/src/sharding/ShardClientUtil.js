@@ -70,6 +70,15 @@ class ShardClientUtil {
    * @type {number[]}
    * @readonly
    */
+  get clusterId() {
+    return Number(this.client.options.clusterId || process.env.CLUSTER_ID);
+  }
+
+  /**
+   * Array of shard ids of this client
+   * @type {number[]}
+   * @readonly
+   */
   get ids() {
     return this.client.options.shards;
   }

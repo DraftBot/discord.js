@@ -1,6 +1,6 @@
 'use strict';
 
-const { DiscordAPIError } = require('@discordjs/rest');
+const { DiscordAPIError } = require('@draftbot/rest');
 const { lazy } = require('@discordjs/util');
 const { RESTJSONErrorCodes, ChannelFlags, ChannelType, PermissionFlagsBits, Routes } = require('discord-api-types/v10');
 const { BaseChannel } = require('./BaseChannel');

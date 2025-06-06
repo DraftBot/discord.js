@@ -22,7 +22,7 @@ export enum CompressionMethod {
 	ZlibSync,
 }
 
-export const DefaultDeviceProperty = `@discordjs/ws [VI]{{inject}}[/VI]` as `@discordjs/ws ${string}`;
+export const DefaultDeviceProperty = `@draftbot/ws [VI]{{inject}}[/VI]` as `@draftbot/ws ${string}`;
 
 const getDefaultSessionStore = lazy(() => new Collection<number, SessionInfo | null>());
 

@@ -2,7 +2,7 @@
 
 const process = require('node:process');
 const { Collection } = require('@discordjs/collection');
-const { DiscordAPIError } = require('@discordjs/rest');
+const { DiscordAPIError } = require('@draftbot/rest');
 const { RESTJSONErrorCodes, Routes } = require('discord-api-types/v10');
 const CachedManager = require('./CachedManager');
 const { DiscordjsTypeError, ErrorCodes } = require('../errors');

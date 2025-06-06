@@ -59,6 +59,12 @@ class MessageComponentInteraction extends BaseInteraction {
     this.replied = false;
 
     /**
+     * Whether this interaction has already been updated to
+     * @type {boolean}
+     */
+    this.updated = false;
+
+    /**
      * An associated interaction webhook, can be used to further interact with this interaction
      * @type {InteractionWebhook}
      */
