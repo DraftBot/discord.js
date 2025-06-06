@@ -71,8 +71,8 @@
 		"@discordjs/formatters": "workspace:^",
 		"@discordjs/rest": "2.4.0",
 		"@discordjs/util": "workspace:^",
-		"@discordjs/ws": "2.0.0",
-		"discord-api-types": "0.37.97"
+		"@discordjs/ws": "2.0.2",
+		"discord-api-types": "^0.37.119"
 	},
 	"devDependencies": {
 		"@discordjs/api-extractor": "workspace:^",

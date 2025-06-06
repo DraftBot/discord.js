@@ -76,6 +76,20 @@ test('guildMemberAvatar dynamic-not-animated', () => {
 	expect(cdn.guildMemberAvatar(id, id, hash)).toEqual(`${baseCDN}/guilds/${id}/users/${id}/avatars/${hash}.png`);
 });
 
+test('guildMemberBanner default', () => {
+	expect(cdn.guildMemberBanner(id, id, hash)).toEqual(`${baseCDN}/guilds/${id}/users/${id}/banners/${hash}.webp`);
+});
+
+test('guildMemberBanner dynamic-animated', () => {
+	expect(cdn.guildMemberBanner(id, id, animatedHash)).toEqual(
+		`${baseCDN}/guilds/${id}/users/${id}/banners/${animatedHash}.gif`,
+	);
+});
+
+test('guildMemberBanner dynamic-not-animated', () => {
+	expect(cdn.guildMemberBanner(id, id, hash)).toEqual(`${baseCDN}/guilds/${id}/users/${id}/banners/${hash}.webp`);
+});
+
 test('guildScheduledEventCover default', () => {
 	expect(cdn.guildScheduledEventCover(id, hash)).toEqual(`${baseCDN}/guild-events/${id}/${hash}.png`);
 });
@@ -114,6 +128,10 @@ test('stickerPackBanner default', () => {
 
 test('teamIcon default', () => {
 	expect(cdn.teamIcon(id, hash)).toEqual(`${baseCDN}/team-icons/${id}/${hash}.png`);
+});
+
+test('soundboardSound', () => {
+	expect(cdn.soundboardSound(id)).toEqual(`${baseCDN}/soundboard-sounds/${id}`);
 });
 
 test('makeURL throws on invalid size', () => {

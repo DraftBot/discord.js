@@ -1,8 +1,8 @@
 'use strict';
 
 const { Collection } = require('@discordjs/collection');
-const { makeURLSearchParams } = require('@draftbot/rest');
 const { isJSONEncodable } = require('@discordjs/util');
+const { makeURLSearchParams } = require('@draftbot/rest');
 const { Routes } = require('discord-api-types/v10');
 const ApplicationCommandPermissionsManager = require('./ApplicationCommandPermissionsManager');
 const CachedManager = require('./CachedManager');
@@ -82,7 +82,7 @@ class ApplicationCommandManager extends CachedManager {
    * Options used to fetch Application Commands from Discord
    * @typedef {BaseFetchOptions} FetchApplicationCommandOptions
    * @property {Snowflake} [guildId] The guild's id to fetch commands for, for when the guild is not cached
-   * @property {LocaleString} [locale] The locale to use when fetching this command
+   * @property {Locale} [locale] The locale to use when fetching this command
    * @property {boolean} [withLocalizations] Whether to fetch all localization data
    */
 
