@@ -77,7 +77,7 @@ test('guildMemberAvatar dynamic-not-animated', () => {
 });
 
 test('guildMemberBanner default', () => {
-	expect(cdn.guildMemberBanner(id, id, hash)).toEqual(`${baseCDN}/guilds/${id}/users/${id}/banners/${hash}.webp`);
+	expect(cdn.guildMemberBanner(id, id, hash)).toEqual(`${baseCDN}/guilds/${id}/users/${id}/banners/${hash}.png`);
 });
 
 test('guildMemberBanner dynamic-animated', () => {
@@ -87,7 +87,7 @@ test('guildMemberBanner dynamic-animated', () => {
 });
 
 test('guildMemberBanner dynamic-not-animated', () => {
-	expect(cdn.guildMemberBanner(id, id, hash)).toEqual(`${baseCDN}/guilds/${id}/users/${id}/banners/${hash}.webp`);
+	expect(cdn.guildMemberBanner(id, id, hash)).toEqual(`${baseCDN}/guilds/${id}/users/${id}/banners/${hash}.png`);
 });
 
 test('guildScheduledEventCover default', () => {
@@ -135,7 +135,6 @@ test('soundboardSound', () => {
 });
 
 test('makeURL throws on invalid size', () => {
-	// @ts-expect-error: Invalid size
 	expect(() => cdn.avatar(id, animatedHash, { size: 5 })).toThrow(RangeError);
 });
 
