@@ -63,7 +63,7 @@ test('emoji gif', () => {
 });
 
 test('emoji animated', () => {
-	expect(cdn.emoji(id, { animated: true })).toEqual(`${baseCDN}/emojis/${id}.webp?animated=true`);
+	expect(cdn.emoji(id, { animated: true })).toEqual(`${baseCDN}/emojis/${id}.gif?animated=true`);
 });
 
 test('emoji with GIF format', () => {
@@ -143,7 +143,7 @@ test('soundboardSound', () => {
 });
 
 test('guildTagBadge', () => {
-	expect(cdn.guildTagBadge(id, hash)).toEqual(`${baseCDN}/guild-tag-badges/${id}/${hash}.webp`);
+	expect(cdn.guildTagBadge(id, hash)).toEqual(`${baseCDN}/guild-tag-badges/${id}/${hash}.png`);
 });
 
 test('makeURL throws on invalid size', () => {
