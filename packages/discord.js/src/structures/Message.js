@@ -443,11 +443,15 @@ class Message extends Base {
     }
 
     if (data.poll) {
-      /**
-       * The poll that was sent with the message
-       * @type {?Poll}
-       */
-      this.poll = new Poll(this.client, data.poll, this);
+      if (this.poll) {
+        this.poll._patch(data.poll);
+      } else {
+        /**
+         * The poll that was sent with the message
+         * @type {?Poll}
+         */
+        this.poll = new Poll(this.client, data.poll, this, this.channel);
+      }
     } else {
       this.poll ??= null;
     }
@@ -813,6 +817,7 @@ class Message extends Base {
     return Boolean(
       channel?.type === ChannelType.GuildAnnouncement &&
         !this.flags.has(MessageFlags.Crossposted) &&
+        this.reference?.type !== MessageReferenceType.Forward &&
         this.type === MessageType.Default &&
         !this.poll &&
         channel.viewable &&

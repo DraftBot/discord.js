@@ -371,6 +371,11 @@
  */
 
 /**
+ * @external EntryPointCommandHandlerType
+ * @see {@link https://discord-api-types.dev/api/discord-api-types-v10/enum/EntryPointCommandHandlerType}
+ */
+
+/**
  * @external ForumLayoutType
  * @see {@link https://discord-api-types.dev/api/discord-api-types-v10/enum/ForumLayoutType}
  */
@@ -511,6 +516,11 @@
  */
 
 /**
+ * @external InviteFlags
+ * @see {@link https://discord-api-types.dev/api/discord-api-types-v10/enum/InviteFlags}
+ */
+
+/**
  * @external InviteType
  * @see {@link https://discord-api-types.dev/api/discord-api-types-v10/enum/InviteType}
  */
@@ -543,6 +553,11 @@
 /**
  * @external MessageFlags
  * @see {@link https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageFlags}
+ */
+
+/**
+ * @external NameplatePalette
+ * @see {@link https://discord-api-types.dev/api/discord-api-types-v10/enum/NameplatePalette}
  */
 
 /**

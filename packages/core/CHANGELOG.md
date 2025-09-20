@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+# [@discordjs/core@2.2.2](https://github.com/discordjs/discord.js/compare/@discordjs/core@2.2.1...@discordjs/core@2.2.2) - (2025-09-10)
+
+## Bug Fixes
+
+- **users:** Correct type for editing current guild member (#11098) ([9ae7377](https://github.com/discordjs/discord.js/commit/9ae737708b24400320a2da4a85a6c977475a05a5))
+- **guild:** Creating a template actually creates a template (#11030) ([ac6ff15](https://github.com/discordjs/discord.js/commit/ac6ff15b7dc4a88753b7cfdf1bca1b4bcc1cc260))
+
+## Documentation
+
+- **guild:** Deprecate API related to guild ownership ([6fb0b1c](https://github.com/discordjs/discord.js/commit/6fb0b1cef6e479be3d47370438d8a588a7c2b850))
+
+# [@discordjs/core@2.2.1](https://github.com/discordjs/discord.js/compare/@discordjs/core@2.2.0...@discordjs/core@2.2.1) - (2025-08-20)
+
+## Bug Fixes
+
+- Adjust `reason` in methods options (#10977) ([9fc3e5e](https://github.com/discordjs/discord.js/commit/9fc3e5ea72a2714d81cc57cbac4f378a49934446))
+
+# [@discordjs/core@2.2.0](https://github.com/discordjs/discord.js/compare/@discordjs/core@2.1.1...@discordjs/core@2.2.0) - (2025-06-25)
+
+## Features
+
+- **webhook:** Support `with_components` (#10945) ([7713627](https://github.com/discordjs/discord.js/commit/7713627fd18599a6187b325e1e4bc9a17cf23e21))
+
+# [@discordjs/core@2.1.1](https://github.com/discordjs/discord.js/compare/@discordjs/core@2.1.0...@discordjs/core@2.1.1) - (2025-06-16)
+
+## Bug Fixes
+
+- **guild:** Fix incorrectly-detected deprecated overload ([d0a535e](https://github.com/discordjs/discord.js/commit/d0a535ea6a66861276691a51547adfb2bcef0384))
+
 # [@discordjs/core@2.1.0](https://github.com/discordjs/discord.js/compare/@discordjs/core@2.0.1...@discordjs/core@2.1.0) - (2025-04-25)
 
 ## Features
