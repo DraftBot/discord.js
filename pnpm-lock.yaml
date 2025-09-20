@@ -943,18 +943,12 @@ importers:
       '@discordjs/util':
         specifier: workspace:^
         version: link:../util
-<<<<<<< HEAD
       '@draftbot/rest':
         specifier: workspace:^
         version: link:../rest
       '@draftbot/ws':
         specifier: ^1.1.1
         version: 1.1.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)
-=======
-      '@discordjs/ws':
-        specifier: ^1.2.3
-        version: 1.2.3(bufferutil@4.0.8)(utf-8-validate@6.0.4)
->>>>>>> pr-11096
       '@sapphire/snowflake':
         specifier: 3.5.3
         version: 3.5.3
@@ -2811,24 +2805,18 @@ packages:
     resolution: {integrity: sha512-5cnX+tASiPCqCWtFcFslxBVUaCetB0thvM/JyavhbXInP1HJIEU+Qv/zMrnuwSsX3yWH2lVXNJZeDK3EiP4HHg==}
     engines: {node: '>=16.11.0'}
 
-<<<<<<< HEAD
   '@discordjs/rest@2.4.0':
     resolution: {integrity: sha512-Xb2irDqNcq+O8F0/k/NaDp7+t091p+acb51iA4bCKfIn+WFWd6HrNvcsSbMMxIR9NjcMZS6NReTKygqiQN+ntw==}
     engines: {node: '>=18'}
 
-  '@discordjs/rest@2.5.0':
-    resolution: {integrity: sha512-PWhchxTzpn9EV3vvPRpwS0EE2rNYB9pvzDU/eLLW3mByJl0ZHZjHI2/wA8EbH2gRMQV7nu+0FoDF84oiPl8VAQ==}
-=======
   '@discordjs/rest@2.5.1':
     resolution: {integrity: sha512-Tg9840IneBcbrAjcGaQzHUJWFNq1MMWZjTdjJ0WS/89IffaNKc++iOvffucPxQTF/gviO9+9r8kEPea1X5J2Dw==}
->>>>>>> pr-11096
     engines: {node: '>=18'}
 
   '@discordjs/util@1.1.1':
     resolution: {integrity: sha512-eddz6UnOBEB1oITPinyrB2Pttej49M9FZQY8NxgEvc3tq6ZICZ19m70RsmzRdDHk80O9NoYN/25AqJl8vPVf/g==}
     engines: {node: '>=18'}
 
-<<<<<<< HEAD
   '@discordjs/ws@2.0.2':
     resolution: {integrity: sha512-p/9/H1uCs8GTV5Eq693/WM+3MOMNsU4uDlu1oQCJfj/Svl0DEsQFnGCh+GXTo5hPVHQHwVeFUlDSYOF4xPp3sg==}
     engines: {node: '>=20'}
@@ -2847,10 +2835,6 @@ packages:
 
   '@draftbot/ws@1.1.1':
     resolution: {integrity: sha512-XUx2c84VDpyZXjHQQSRyWujwj9HYRxkltyTdKP6pDaRnUSjzBfhF4UGnOePNZaE3+6dgCpuwVQ+7RiI4gYWRlQ==}
-=======
-  '@discordjs/ws@1.2.3':
-    resolution: {integrity: sha512-wPlQDxEmlDg5IxhJPuxXr3Vy9AjYq5xCvFWGJyD7w7Np8ZGu+Mc+97LCoEc/+AYCo2IDpKioiH0/c/mj5ZR9Uw==}
->>>>>>> pr-11096
     engines: {node: '>=16.11.0'}
 
   '@edge-runtime/format@2.2.1':
@@ -8393,19 +8377,14 @@ packages:
   discord-api-types@0.37.119:
     resolution: {integrity: sha512-WasbGFXEB+VQWXlo6IpW3oUv73Yuau1Ig4AZF/m13tXcTKnMpc/mHjpztIlz4+BM9FG9BHQkEXiPto3bKduQUg==}
 
-<<<<<<< HEAD
   discord-api-types@0.37.90:
     resolution: {integrity: sha512-lpOJSGrqHuXoM4FV/2HtjoaJpCClGFHpRNIdZEW8zPINlsCHNSfIwA2EQ8dxeE6k1QhhTuM9ZlOGVYXoU7FLgA==}
 
   discord-api-types@0.37.97:
     resolution: {integrity: sha512-No1BXPcVkyVD4ZVmbNgDKaBoqgeQ+FJpzZ8wqHkfmBnTZig1FcH3iPPersiK1TUIAzgClh2IvOuVUYfcWLQAOA==}
 
-  discord-api-types@0.38.1:
-    resolution: {integrity: sha512-vsjsqjAuxsPhiwbPjTBeGQaDPlizFmSkU0mTzFGMgRxqCDIRBR7iTY74HacpzrDV0QtERHRKQEk1tq7drZUtHg==}
-=======
   discord-api-types@0.38.24:
     resolution: {integrity: sha512-P7/DkcFIiIoaBogStnhhcGRX7KR+gIFp0SpmwsZUIM0bgDkYMEUx+8l+t3quYc/KSgg92wvE9w/4mabO57EMug==}
->>>>>>> pr-11096
 
   dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
@@ -16387,7 +16366,6 @@ snapshots:
     dependencies:
       discord-api-types: 0.38.24
 
-<<<<<<< HEAD
   '@discordjs/rest@2.4.0':
     dependencies:
       '@discordjs/collection': 2.1.1
@@ -16400,10 +16378,7 @@ snapshots:
       tslib: 2.8.1
       undici: 6.19.8
 
-  '@discordjs/rest@2.5.0':
-=======
   '@discordjs/rest@2.5.1':
->>>>>>> pr-11096
     dependencies:
       '@discordjs/collection': 2.1.1
       '@discordjs/util': 1.1.1
@@ -16417,11 +16392,7 @@ snapshots:
 
   '@discordjs/util@1.1.1': {}
 
-<<<<<<< HEAD
   '@discordjs/ws@2.0.2(bufferutil@4.0.8)(utf-8-validate@6.0.4)':
-=======
-  '@discordjs/ws@1.2.3(bufferutil@4.0.8)(utf-8-validate@6.0.4)':
->>>>>>> pr-11096
     dependencies:
       '@discordjs/collection': 2.1.1
       '@discordjs/rest': 2.5.1
@@ -17076,7 +17047,7 @@ snapshots:
   '@jest/console@29.7.0':
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 18.19.74
+      '@types/node': 22.15.2
       chalk: 4.1.2
       jest-message-util: 29.7.0
       jest-util: 29.7.0
@@ -17196,7 +17167,7 @@ snapshots:
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
       '@jridgewell/trace-mapping': 0.3.25
-      '@types/node': 18.19.74
+      '@types/node': 22.15.2
       chalk: 4.1.2
       collect-v8-coverage: 1.0.2
       exit: 0.1.2
@@ -21109,7 +21080,7 @@ snapshots:
 
   '@types/node-fetch@2.6.11':
     dependencies:
-      '@types/node': 18.19.74
+      '@types/node': 22.15.2
       form-data: 4.0.0
 
   '@types/node@16.18.105': {}
@@ -21140,7 +21111,7 @@ snapshots:
 
   '@types/pg@8.11.6':
     dependencies:
-      '@types/node': 18.19.74
+      '@types/node': 22.15.2
       pg-protocol: 1.6.1
       pg-types: 4.0.2
 
@@ -23813,15 +23784,11 @@ snapshots:
 
   discord-api-types@0.37.119: {}
 
-<<<<<<< HEAD
   discord-api-types@0.37.90: {}
 
   discord-api-types@0.37.97: {}
 
-  discord-api-types@0.38.1: {}
-=======
   discord-api-types@0.38.24: {}
->>>>>>> pr-11096
 
   dlv@1.1.3: {}
 
@@ -26641,7 +26608,7 @@ snapshots:
     dependencies:
       '@jest/types': 29.6.3
       '@types/graceful-fs': 4.1.9
-      '@types/node': 18.19.74
+      '@types/node': 22.15.2
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -26715,7 +26682,7 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 18.19.74
+      '@types/node': 22.15.2
       chalk: 4.1.2
       emittery: 0.13.1
       graceful-fs: 4.2.11
@@ -26743,7 +26710,7 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 18.19.74
+      '@types/node': 22.15.2
       chalk: 4.1.2
       cjs-module-lexer: 1.3.1
       collect-v8-coverage: 1.0.2
@@ -26808,7 +26775,7 @@ snapshots:
     dependencies:
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 18.19.74
+      '@types/node': 22.15.2
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.13.1
@@ -29141,7 +29108,7 @@ snapshots:
       postcss: 8.4.41
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.8
+      resolve: 1.22.10
 
   postcss-js@4.0.1(postcss@8.4.41):
     dependencies:
@@ -31966,7 +31933,7 @@ snapshots:
   vite-node@2.0.5(@types/node@16.18.105)(terser@5.39.0):
     dependencies:
       cac: 6.7.14
-      debug: 4.3.6
+      debug: 4.4.0
       pathe: 1.1.2
       tinyrainbow: 1.2.0
       vite: 5.4.2(@types/node@16.18.105)(terser@5.39.0)
@@ -31984,7 +31951,7 @@ snapshots:
   vite-node@2.0.5(@types/node@18.17.9)(terser@5.39.0):
     dependencies:
       cac: 6.7.14
-      debug: 4.3.6
+      debug: 4.4.0
       pathe: 1.1.2
       tinyrainbow: 1.2.0
       vite: 5.4.2(@types/node@18.17.9)(terser@5.39.0)
@@ -32002,7 +31969,7 @@ snapshots:
   vite-node@2.0.5(@types/node@18.19.45)(terser@5.31.6):
     dependencies:
       cac: 6.7.14
-      debug: 4.3.6
+      debug: 4.4.0
       pathe: 1.1.2
       tinyrainbow: 1.2.0
       vite: 5.4.2(@types/node@18.19.45)(terser@5.31.6)
@@ -32020,7 +31987,7 @@ snapshots:
   vite-node@2.0.5(@types/node@18.19.45)(terser@5.39.0):
     dependencies:
       cac: 6.7.14
-      debug: 4.3.6
+      debug: 4.4.0
       pathe: 1.1.2
       tinyrainbow: 1.2.0
       vite: 5.4.2(@types/node@18.19.45)(terser@5.39.0)
@@ -32038,7 +32005,7 @@ snapshots:
   vite-node@2.0.5(@types/node@22.15.2)(terser@5.39.0):
     dependencies:
       cac: 6.7.14
-      debug: 4.3.6
+      debug: 4.4.0
       pathe: 1.1.2
       tinyrainbow: 1.2.0
       vite: 5.4.2(@types/node@22.15.2)(terser@5.39.0)
