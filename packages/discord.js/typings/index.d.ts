@@ -37,7 +37,7 @@ import {
 } from '@discordjs/formatters';
 import { Awaitable, JSONEncodable } from '@discordjs/util';
 import { Collection, ReadonlyCollection } from '@discordjs/collection';
-import { BaseImageURLOptions, EmojiURLOptions, ImageURLOptions, RawFile, REST, RESTOptions } from '@discordjs/rest';
+import { BaseImageURLOptions, EmojiURLOptions, ImageURLOptions, RawFile, REST, RESTOptions } from '@draftbot/rest';
 import {
   WebSocketManager as WSWebSocketManager,
   IShardingStrategy,
