@@ -2621,6 +2621,7 @@ export class MessageComponentInteraction<Cached extends CacheType = CacheType> e
   public edit(options: string | MessagePayload | WebhookMessageEditOptions): Promise<Message<BooleanCache<Cached>>>;
   public fetchReply(message?: Snowflake | '@original'): Promise<Message<BooleanCache<Cached>>>;
   public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
+  public send(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
   public reply(
     options: InteractionReplyOptions & { withResponse: true },
   ): Promise<InteractionCallbackResponse<BooleanCache<Cached>>>;
