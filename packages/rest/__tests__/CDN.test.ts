@@ -63,7 +63,7 @@ test('emoji gif', () => {
 });
 
 test('emoji animated', () => {
-	expect(cdn.emoji(id, { animated: true })).toEqual(`${baseCDN}/emojis/${id}.gif?animated=true`);
+	expect(cdn.emoji(id, { animated: true })).toEqual(`${baseCDN}/emojis/${id}.png?animated=true`);
 });
 
 test('emoji with GIF format', () => {
