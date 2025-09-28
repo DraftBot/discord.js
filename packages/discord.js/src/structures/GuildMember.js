@@ -273,7 +273,7 @@ class GuildMember extends Base {
    * @readonly
    */
   get displayName() {
-    return this.nickname?.replaceAll(/@(everyone|here)/, '$1') ?? this.user.displayName;
+    return this.nickname?.replaceAll(/@(everyone|here)/g, '$1') ?? this.user.displayName;
   }
 
   /**
