@@ -59,6 +59,9 @@ class TextBasedChannel {
    */
   get embedable() {
     if (!this.guild.members.me) throw new Error(ErrorCodes.GuildUncachedMe);
+
+    if (this.isThread() && !this.sendable) return false;
+
     const permissions = this.permissionsFor(this.client.user);
     if (!permissions) return false;
     return permissions.has(
