@@ -947,8 +947,8 @@ importers:
         specifier: workspace:^
         version: link:../rest
       '@draftbot/ws':
-        specifier: workspace:^
-        version: link:../ws
+        specifier: ^1.1.1
+        version: 1.1.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       '@sapphire/snowflake':
         specifier: 3.5.3
         version: 3.5.3
@@ -2820,6 +2820,22 @@ packages:
   '@discordjs/ws@2.0.2':
     resolution: {integrity: sha512-p/9/H1uCs8GTV5Eq693/WM+3MOMNsU4uDlu1oQCJfj/Svl0DEsQFnGCh+GXTo5hPVHQHwVeFUlDSYOF4xPp3sg==}
     engines: {node: '>=20'}
+
+  '@draftbot/collection@2.1.1':
+    resolution: {integrity: sha512-vIlRsg4qy/JJToCT2vLRA+EkcTP1ObdTCG4AIPH3VW0FsO/16LqDYLBNVdeYlOarMmZvXRslHo70UfRwfF+wyA==}
+    engines: {node: '>=18'}
+
+  '@draftbot/rest@2.6.0':
+    resolution: {integrity: sha512-a96UMyUKApbB+awsWmn4f7MAN9lIUdMPOvPSGKLowuRsqZQQK+1DJmJZVEG3FJfSmEEJqJLmfffSHsB99paChg==}
+    engines: {node: '>=18'}
+
+  '@draftbot/util@1.1.1':
+    resolution: {integrity: sha512-u1z39RAzHMrf4zF5DduMgt37altfepS5Vze0cRrbXUS6n7PdInIranMfNugbJUWKsLes+YI2DEIIhRnCKaAf6g==}
+    engines: {node: '>=18'}
+
+  '@draftbot/ws@1.1.1':
+    resolution: {integrity: sha512-XUx2c84VDpyZXjHQQSRyWujwj9HYRxkltyTdKP6pDaRnUSjzBfhF4UGnOePNZaE3+6dgCpuwVQ+7RiI4gYWRlQ==}
+    engines: {node: '>=16.11.0'}
 
   '@edge-runtime/format@2.2.1':
     resolution: {integrity: sha512-JQTRVuiusQLNNLe2W9tnzBlV/GvSVcozLl4XZHk5swnRZ/v6jp8TqR8P7sqmJsQqblDZ3EztcWmLDbhRje/+8g==}
@@ -8360,6 +8376,9 @@ packages:
 
   discord-api-types@0.37.119:
     resolution: {integrity: sha512-WasbGFXEB+VQWXlo6IpW3oUv73Yuau1Ig4AZF/m13tXcTKnMpc/mHjpztIlz4+BM9FG9BHQkEXiPto3bKduQUg==}
+
+  discord-api-types@0.37.90:
+    resolution: {integrity: sha512-lpOJSGrqHuXoM4FV/2HtjoaJpCClGFHpRNIdZEW8zPINlsCHNSfIwA2EQ8dxeE6k1QhhTuM9ZlOGVYXoU7FLgA==}
 
   discord-api-types@0.37.97:
     resolution: {integrity: sha512-No1BXPcVkyVD4ZVmbNgDKaBoqgeQ+FJpzZ8wqHkfmBnTZig1FcH3iPPersiK1TUIAzgClh2IvOuVUYfcWLQAOA==}
@@ -16391,6 +16410,37 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  '@draftbot/collection@2.1.1': {}
+
+  '@draftbot/rest@2.6.0':
+    dependencies:
+      '@discordjs/collection': 2.1.1
+      '@discordjs/util': 1.1.1
+      '@sapphire/async-queue': 1.5.3
+      '@sapphire/snowflake': 3.5.3
+      '@vladfrangu/async_event_emitter': 2.4.6
+      discord-api-types: 0.38.31
+      magic-bytes.js: 1.10.0
+      tslib: 2.8.1
+      undici: 6.21.3
+
+  '@draftbot/util@1.1.1': {}
+
+  '@draftbot/ws@1.1.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)':
+    dependencies:
+      '@draftbot/collection': 2.1.1
+      '@draftbot/rest': 2.6.0
+      '@draftbot/util': 1.1.1
+      '@sapphire/async-queue': 1.5.3
+      '@types/ws': 8.5.12
+      '@vladfrangu/async_event_emitter': 2.4.6
+      discord-api-types: 0.37.90
+      tslib: 2.8.1
+      ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@6.0.4)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   '@edge-runtime/format@2.2.1': {}
 
   '@edge-runtime/node-utils@2.3.0': {}
@@ -23736,6 +23786,8 @@ snapshots:
       path-type: 4.0.0
 
   discord-api-types@0.37.119: {}
+
+  discord-api-types@0.37.90: {}
 
   discord-api-types@0.37.97: {}
 
