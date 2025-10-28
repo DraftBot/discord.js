@@ -443,11 +443,15 @@ class Message extends Base {
     }
 
     if (data.poll) {
-      /**
-       * The poll that was sent with the message
-       * @type {?Poll}
-       */
-      this.poll = new Poll(this.client, data.poll, this);
+      if (this.poll) {
+        this.poll._patch(data.poll);
+      } else {
+        /**
+         * The poll that was sent with the message
+         * @type {?Poll}
+         */
+        this.poll = new Poll(this.client, data.poll, this, this.channel);
+      }
     } else {
       this.poll ??= null;
     }
@@ -620,7 +624,7 @@ class Message extends Base {
    * Similar to createReactionCollector but in promise form.
    * Resolves with a collection of reactions that pass the specified filter.
    * @param {AwaitReactionsOptions} [options={}] Optional options to pass to the internal collector
-   * @returns {Promise<Collection<string | Snowflake, MessageReaction>>}
+   * @returns {Promise<Collection<string|Snowflake, MessageReaction>>}
    * @example
    * // Create a reaction collector
    * const filter = (reaction, user) => reaction.emoji.name === '👌' && user.id === 'someId'
@@ -778,11 +782,17 @@ class Message extends Base {
    */
   get pinnable() {
     const { channel } = this;
-    return Boolean(
-      !this.system &&
-        (!this.guild ||
-          (channel?.viewable &&
-            channel?.permissionsFor(this.client.user)?.has(PermissionFlagsBits.ManageMessages, false))),
+
+    if (this.system) return false;
+    if (!this.guild) return true;
+    if (!channel?.viewable) return false;
+
+    const permissions = channel?.permissionsFor(this.client.user);
+    if (!permissions) return false;
+
+    return (
+      permissions.has([PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.PinMessages]) ||
+      permissions.has([PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.ManageMessages])
     );
   }
 
@@ -813,6 +823,7 @@ class Message extends Base {
     return Boolean(
       channel?.type === ChannelType.GuildAnnouncement &&
         !this.flags.has(MessageFlags.Crossposted) &&
+        this.reference?.type !== MessageReferenceType.Forward &&
         this.type === MessageType.Default &&
         !this.poll &&
         channel.viewable &&

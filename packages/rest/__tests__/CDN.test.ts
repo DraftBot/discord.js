@@ -54,12 +54,20 @@ test('discoverySplash default', () => {
 	expect(cdn.discoverySplash(id, hash)).toEqual(`${baseCDN}/discovery-splashes/${id}/${hash}.png`);
 });
 
-test('emoji default', () => {
+test('emoji', () => {
 	expect(cdn.emoji(id)).toEqual(`${baseCDN}/emojis/${id}.png`);
 });
 
 test('emoji gif', () => {
 	expect(cdn.emoji(id, 'gif')).toEqual(`${baseCDN}/emojis/${id}.gif`);
+});
+
+test('emoji animated', () => {
+	expect(cdn.emoji(id, { animated: true })).toEqual(`${baseCDN}/emojis/${id}.png?animated=true`);
+});
+
+test('emoji with GIF format', () => {
+	expect(cdn.emoji(id, { extension: 'gif' })).toEqual(`${baseCDN}/emojis/${id}.gif`);
 });
 
 test('guildMemberAvatar default', () => {
@@ -132,6 +140,10 @@ test('teamIcon default', () => {
 
 test('soundboardSound', () => {
 	expect(cdn.soundboardSound(id)).toEqual(`${baseCDN}/soundboard-sounds/${id}`);
+});
+
+test('guildTagBadge', () => {
+	expect(cdn.guildTagBadge(id, hash)).toEqual(`${baseCDN}/guild-tag-badges/${id}/${hash}.png`);
 });
 
 test('makeURL throws on invalid size', () => {

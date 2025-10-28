@@ -95,6 +95,8 @@ import {
 	type RESTPostAPIGuildsMFAResult,
 	type RESTPostAPIGuildsResult,
 	type RESTPutAPIGuildBanJSONBody,
+	type RESTPutAPIGuildIncidentActionsJSONBody,
+	type RESTPutAPIGuildIncidentActionsResult,
 	type RESTPutAPIGuildMemberJSONBody,
 	type RESTPutAPIGuildMemberResult,
 	type RESTPutAPIGuildOnboardingJSONBody,
@@ -115,7 +117,7 @@ export class GuildsAPI {
 	 * @param options - The options for fetching the guild
 	 * @deprecated Use the overload with a query instead.
 	 */
-	public async get(guildId: Snowflake, { signal }?: Pick<RequestData, 'signal'>): Promise<RESTGetAPIGuildResult>;
+	public async get(guildId: Snowflake, { signal }: Pick<RequestData, 'signal'>): Promise<RESTGetAPIGuildResult>;
 
 	/**
 	 * Fetches a guild
@@ -166,6 +168,7 @@ export class GuildsAPI {
 	 * @see {@link https://discord.com/developers/docs/resources/guild#create-guild}
 	 * @param body - The guild to create
 	 * @param options - The options for creating the guild
+	 * @deprecated API related to guild ownership may no longer be used.
 	 */
 	public async create(body: RESTPostAPIGuildsJSONBody, { signal }: Pick<RequestData, 'signal'> = {}) {
 		return this.rest.post(Routes.guilds(), { body, signal }) as Promise<RESTPostAPIGuildsResult>;
@@ -197,9 +200,10 @@ export class GuildsAPI {
 	 * @see {@link https://discord.com/developers/docs/resources/guild#delete-guild}
 	 * @param guildId - The id of the guild to delete
 	 * @param options - The options for deleting this guild
+	 * @deprecated API related to guild ownership may no longer be used.
 	 */
-	public async delete(guildId: Snowflake, { signal, reason }: Pick<RequestData, 'reason' | 'signal'> = {}) {
-		await this.rest.delete(Routes.guild(guildId), { reason, signal });
+	public async delete(guildId: Snowflake, { signal }: Pick<RequestData, 'signal'> = {}) {
+		await this.rest.delete(Routes.guild(guildId), { signal });
 	}
 
 	/**
@@ -491,6 +495,7 @@ export class GuildsAPI {
 	 * @param guildId - The id of the guild to edit the MFA level for
 	 * @param level - The new MFA level
 	 * @param options - The options for editing the MFA level
+	 * @deprecated API related to guild ownership may no longer be used.
 	 */
 	public async editMFALevel(
 		guildId: Snowflake,
@@ -1287,16 +1292,16 @@ export class GuildsAPI {
 	 * Creates a new template
 	 *
 	 * @see {@link https://discord.com/developers/docs/resources/guild-template#create-guild-template}
-	 * @param templateCode - The code of the template
+	 * @param guildId - The id of the guild
 	 * @param body - The data for creating the template
 	 * @param options - The options for creating the template
 	 */
 	public async createTemplate(
-		templateCode: string,
+		guildId: Snowflake,
 		body: RESTPostAPIGuildTemplatesJSONBody,
 		{ signal }: Pick<RequestData, 'signal'> = {},
 	) {
-		return this.rest.post(Routes.template(templateCode), { body, signal }) as Promise<RESTPostAPIGuildTemplatesResult>;
+		return this.rest.post(Routes.guildTemplates(guildId), { body, signal }) as Promise<RESTPostAPIGuildTemplatesResult>;
 	}
 
 	/**
@@ -1355,5 +1360,24 @@ export class GuildsAPI {
 			body,
 			signal,
 		}) as Promise<RESTPutAPIGuildOnboardingResult>;
+	}
+
+	/**
+	 * Modifies incident actions for a guild.
+	 *
+	 * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-incident-actions}
+	 * @param guildId - The id of the guild
+	 * @param body - The data for modifying guild incident actions
+	 * @param options - The options for modifying guild incident actions
+	 */
+	public async editIncidentActions(
+		guildId: Snowflake,
+		body: RESTPutAPIGuildIncidentActionsJSONBody,
+		{ signal }: Pick<RequestData, 'signal'> = {},
+	) {
+		return this.rest.put(Routes.guildIncidentActions(guildId), {
+			body,
+			signal,
+		}) as Promise<RESTPutAPIGuildIncidentActionsResult>;
 	}
 }
