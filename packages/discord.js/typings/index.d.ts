@@ -51,6 +51,7 @@ import {
   IShardingStrategy,
   IIdentifyThrottler,
   SessionInfo,
+  WebSocketManagerOptions,
 } from '@draftbot/ws';
 import {
   APIActionRowComponent,
@@ -639,9 +640,7 @@ export abstract class CommandInteraction<Cached extends CacheType = CacheType> e
   public edit(options: string | MessagePayload | WebhookMessageEditOptions): Promise<Message<BooleanCache<Cached>>>;
   public fetchReply(message?: Snowflake | '@original'): Promise<Message<BooleanCache<Cached>>>;
   public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
-  public send(
-    options: string | MessagePayload | InteractionReplyOptions,
-  ): Promise<InteractionCallbackResponse<BooleanCache<Cached>>>;
+  public send(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
   public reply(
     options: InteractionReplyOptions & { withResponse: true },
   ): Promise<InteractionCallbackResponse<BooleanCache<Cached>>>;
@@ -2633,9 +2632,7 @@ export class MessageComponentInteraction<Cached extends CacheType = CacheType> e
   public edit(options: string | MessagePayload | WebhookMessageEditOptions): Promise<Message<BooleanCache<Cached>>>;
   public fetchReply(message?: Snowflake | '@original'): Promise<Message<BooleanCache<Cached>>>;
   public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
-  public send(
-    options: string | MessagePayload | InteractionReplyOptions,
-  ): Promise<InteractionCallbackResponse<BooleanCache<Cached>>>;
+  public send(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
   public reply(
     options: InteractionReplyOptions & { withResponse: true },
   ): Promise<InteractionCallbackResponse<BooleanCache<Cached>>>;
@@ -2975,9 +2972,7 @@ export class ModalSubmitInteraction<Cached extends CacheType = CacheType> extend
   public replied: boolean;
   public updated: boolean;
   public readonly webhook: InteractionWebhook;
-  public send(
-    options: string | MessagePayload | InteractionReplyOptions,
-  ): Promise<InteractionCallbackResponse<BooleanCache<Cached>>>;
+  public send(options: string | MessagePayload | InteractionReplyOptions): Promise<Message<BooleanCache<Cached>>>;
   public reply(
     options: InteractionReplyOptions & { withResponse: true },
   ): Promise<InteractionCallbackResponse<BooleanCache<Cached>>>;
@@ -6189,7 +6184,7 @@ export interface ClientOptions {
   intents: BitFieldResolvable<GatewayIntentsString, number>;
   waitGuildTimeout?: number;
   sweepers?: SweeperOptions;
-  ws?: WebSocketOptions;
+  ws?: Partial<WebSocketManagerOptions>;
   rest?: Partial<RESTOptions>;
   jsonTransformer?: (obj: unknown) => unknown;
   enforceNonce?: boolean;
