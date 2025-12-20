@@ -34,10 +34,20 @@ import {
 	type RESTPutAPIChannelPermissionJSONBody,
 	type RESTPutAPIChannelRecipientJSONBody,
 	type Snowflake,
+	type RESTPostAPISoundboardSendSoundJSONBody,
+	type RESTPostAPISendSoundboardSoundResult,
 } from 'discord-api-types/v10';
 
 export interface StartForumThreadOptions extends RESTPostAPIGuildForumThreadsJSONBody {
 	message: RESTPostAPIGuildForumThreadsJSONBody['message'] & { files?: RawFile[] };
+}
+
+export interface CreateMessageOptions extends RESTPostAPIChannelMessageJSONBody {
+	files?: RawFile[];
+}
+
+export interface EditMessageOptions extends RESTPatchAPIChannelMessageJSONBody {
+	files?: RawFile[];
 }
 
 export class ChannelsAPI {
@@ -53,7 +63,7 @@ export class ChannelsAPI {
 	 */
 	public async createMessage(
 		channelId: Snowflake,
-		{ files, ...body }: RESTPostAPIChannelMessageJSONBody & { files?: RawFile[] },
+		{ files, ...body }: CreateMessageOptions,
 		{ signal }: Pick<RequestData, 'signal'> = {},
 	) {
 		return this.rest.post(Routes.channelMessages(channelId), {
@@ -75,7 +85,7 @@ export class ChannelsAPI {
 	public async editMessage(
 		channelId: Snowflake,
 		messageId: Snowflake,
-		{ files, ...body }: RESTPatchAPIChannelMessageJSONBody & { files?: RawFile[] },
+		{ files, ...body }: EditMessageOptions,
 		{ signal }: Pick<RequestData, 'signal'> = {},
 	) {
 		return this.rest.patch(Routes.channelMessage(channelId, messageId), {
@@ -593,6 +603,25 @@ export class ChannelsAPI {
 			reason,
 			signal,
 		});
+	}
+
+	/**
+	 * Sends a soundboard sound in a channel
+	 *
+	 * @see {@link https://discord.com/developers/docs/resources/soundboard#send-soundboard-sound}
+	 * @param channelId - The id of the channel to send the soundboard sound in
+	 * @param body - The data for sending the soundboard sound
+	 * @param options - The options for sending the soundboard sound
+	 */
+	public async sendSoundboardSound(
+		channelId: Snowflake,
+		body: RESTPostAPISoundboardSendSoundJSONBody,
+		{ signal }: Pick<RequestData, 'signal'> = {},
+	) {
+		return this.rest.post(Routes.sendSoundboardSound(channelId), {
+			body,
+			signal,
+		}) as Promise<RESTPostAPISendSoundboardSoundResult>;
 	}
 
 	/**
