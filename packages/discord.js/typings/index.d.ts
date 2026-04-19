@@ -6246,7 +6246,7 @@ export interface CollectorOptions<FilterArguments extends unknown[]> {
   filter?: CollectorFilter<FilterArguments>;
   time?: number;
   idle?: number;
-  dispose?: boolean;
+  dispose?: boolean | string;
 }
 
 export interface CollectorResetTimerOptions {

@@ -159,8 +159,13 @@ class Collector extends EventEmitter {
     if (!this.options.dispose) return;
 
     const dispose = this.dispose(...args);
-    if (!dispose || !(await this.filter(...args)) || !this.collected.has(dispose)) return;
-    this.collected.delete(dispose);
+    if (!dispose) return;
+
+    if (typeof this.options.dispose !== 'string' || this.options.dispose !== args[0]?.id) {
+      if (!(await this.filter(...args)) || !this.collected.has(dispose)) return;
+
+      this.collected.delete(dispose);
+    }
 
     /**
      * Emitted whenever an element is disposed of.
