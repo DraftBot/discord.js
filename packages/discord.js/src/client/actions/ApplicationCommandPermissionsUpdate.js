@@ -15,6 +15,12 @@ const Events = require('../../util/Events');
 class ApplicationCommandPermissionsUpdateAction extends Action {
   handle(data) {
     const client = this.client;
+
+    if (data.application_id === client.application?.id) {
+      const guild = client.guilds.cache.get(data.guild_id);
+      guild?.commands.permissionsCache.set(data.id, data.permissions);
+    }
+
     /**
      * Emitted whenever permissions for an application command in a guild were updated.
      * <warn>This includes permission updates for other applications in addition to the logged in client,

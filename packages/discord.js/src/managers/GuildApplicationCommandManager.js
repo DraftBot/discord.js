@@ -1,5 +1,6 @@
 'use strict';
 
+const { Collection } = require('@discordjs/collection');
 const ApplicationCommandManager = require('./ApplicationCommandManager');
 const ApplicationCommandPermissionsManager = require('./ApplicationCommandPermissionsManager');
 
@@ -22,6 +23,14 @@ class GuildApplicationCommandManager extends ApplicationCommandManager {
      * @type {ApplicationCommandPermissionsManager}
      */
     this.permissions = new ApplicationCommandPermissionsManager(this);
+
+    /**
+     * Shared cache of application command permission overrides for this guild,
+     * keyed by command id (or by application id for guild-wide overrides).
+     * Read and written by every {@link ApplicationCommandPermissionsManager} that targets this guild.
+     * @type {Collection<Snowflake, ApplicationCommandPermissions[]>}
+     */
+    this.permissionsCache = new Collection();
   }
 }
 

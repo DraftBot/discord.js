@@ -66,10 +66,17 @@ class ApplicationCommandPermissionsManager extends BaseManager {
   /* eslint-enable max-len */
 
   /**
+   * Options used to fetch data from Discord
+   * @typedef {Object} BaseFetchOptions
+   * @property {boolean} [cache=true] Whether to cache the fetched data if it wasn't already
+   * @property {boolean} [force=false] Whether to skip the cache check and request the API
+   */
+
+  /**
    * Options for managing permissions for one or more Application Commands
    * <warn>When passing these options to a manager where `guildId` is `null`,
    * `guild` is a required parameter</warn>
-   * @typedef {Object} BaseApplicationCommandPermissionsOptions
+   * @typedef {BaseFetchOptions} BaseApplicationCommandPermissionsOptions
    * @property {GuildResolvable} [guild] The guild to modify / check permissions for
    * <warn>Ignored when the manager has a non-null `guildId` property</warn>
    * @property {ApplicationCommandResolvable} [command] The command to modify / check permissions for
@@ -97,15 +104,34 @@ class ApplicationCommandPermissionsManager extends BaseManager {
    *   .then(perms => console.log(`Fetched ${perms.length} guild level permissions`))
    *   .catch(console.error);
    */
-  async fetch({ guild, command } = {}) {
+  async fetch({ guild, command, cache = true, force = false } = {}) {
     const { guildId, commandId } = this._validateOptions(guild, command);
+    const guildCache = (this.guild ?? this.client.guilds.cache.get(guildId))?.commands.permissionsCache ?? null;
+
     if (commandId) {
-      const data = await this.client.rest.get(this.permissionsPath(guildId, commandId));
-      return data.permissions;
+      if (!force) {
+        const existing = guildCache?.get(commandId);
+        if (existing) return existing;
+      }
+
+      try {
+        const data = await this.client.rest.get(this.permissionsPath(guildId, commandId));
+        if (cache) guildCache?.set(commandId, data.permissions);
+        return data.permissions;
+      } catch (error) {
+        if (error.code !== RESTJSONErrorCodes.UnknownApplicationCommandPermissions) throw error;
+        if (cache) guildCache?.set(commandId, []);
+        return [];
+      }
     }
 
     const data = await this.client.rest.get(this.permissionsPath(guildId));
-    return data.reduce((coll, perm) => coll.set(perm.id, perm.permissions), new Collection());
+    const coll = new Collection();
+    for (const commandPermissions of data) {
+      if (cache) guildCache?.set(commandPermissions.id, commandPermissions.permissions);
+      coll.set(commandPermissions.id, commandPermissions.permissions);
+    }
+    return coll;
   }
 
   /**

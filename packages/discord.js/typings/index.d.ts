@@ -4832,8 +4832,10 @@ export class ApplicationCommandPermissionsManager<
       permissionType?: ApplicationCommandPermissionType;
     },
   ): Promise<boolean>;
-  public fetch(options: FetchSingleOptions): Promise<ApplicationCommandPermissions[]>;
-  public fetch(options: BaseOptions): Promise<Collection<Snowflake, ApplicationCommandPermissions[]>>;
+  public fetch(options: FetchSingleOptions & BaseFetchOptions): Promise<ApplicationCommandPermissions[]>;
+  public fetch(
+    options: BaseOptions & BaseFetchOptions,
+  ): Promise<Collection<Snowflake, ApplicationCommandPermissions[]>>;
   public remove(
     options:
       | (FetchSingleOptions & {
@@ -4962,6 +4964,7 @@ export interface FetchGuildApplicationCommandFetchOptions extends Omit<FetchAppl
 export class GuildApplicationCommandManager extends ApplicationCommandManager<ApplicationCommand, {}, Guild> {
   private constructor(guild: Guild, iterable?: Iterable<RawApplicationCommandData>);
   public guild: Guild;
+  public permissionsCache: Collection<Snowflake, ApplicationCommandPermissions[]>;
   public create(command: ApplicationCommandDataResolvable): Promise<ApplicationCommand>;
   public delete(command: ApplicationCommandResolvable): Promise<ApplicationCommand | null>;
   public edit(
