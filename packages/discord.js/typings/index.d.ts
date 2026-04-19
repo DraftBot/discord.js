@@ -1734,6 +1734,8 @@ export class FileComponent extends Component<APIFileComponent> {
   private constructor(data: APIFileComponent);
   public readonly file: UnfurledMediaItem;
   public get spoiler(): boolean;
+  public get name(): string;
+  public get size(): number;
 }
 
 export class GuildAuditLogs<Event extends AuditLogEvent = AuditLogEvent> {
@@ -4030,6 +4032,8 @@ export class UnfurledMediaItem {
   private constructor(data: APIUnfurledMediaItem);
   public readonly data: APIUnfurledMediaItem;
   public get url(): string;
+  public get name(): string;
+  public get size(): number;
 }
 
 // tslint:disable-next-line no-empty-interface

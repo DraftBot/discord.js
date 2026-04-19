@@ -29,6 +29,24 @@ class FileComponent extends Component {
   }
 
   /**
+   * The name of the file
+   * @type {string}
+   * @readonly
+   */
+  get name() {
+    return this.data.name;
+  }
+
+  /**
+   * The size of the file in bytes
+   * @type {number}
+   * @readonly
+   */
+  get size() {
+    return this.data.size;
+  }
+
+  /**
    * Returns the API-compatible JSON for this component
    * @returns {APIFileComponent}
    */
