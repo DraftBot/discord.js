@@ -2284,6 +2284,7 @@ export class InteractionWebhook {
 export class Invite extends Base {
   private constructor(client: Client<true>, data: RawInviteData);
   public channel: NonThreadGuildBasedChannel | PartialGroupDMChannel | null;
+  public roles: Collection<Snowflake, Role> | null;
   public channelId: Snowflake | null;
   public code: string;
   public get deletable(): boolean;
@@ -7251,6 +7252,7 @@ export interface InviteCreateOptions {
   maxUses?: number;
   unique?: boolean;
   reason?: string;
+  roles?: readonly RoleResolvable[];
   targetApplication?: ApplicationResolvable;
   targetUser?: UserResolvable;
   targetType?: InviteTargetType;

@@ -179,7 +179,7 @@ class GuildInviteManager extends CachedManager {
    */
   async create(
     channel,
-    { temporary, maxAge, maxUses, unique, targetUser, targetApplication, targetType, reason } = {},
+    { temporary, maxAge, maxUses, unique, targetUser, targetApplication, targetType, roles, reason } = {},
   ) {
     const id = this.guild.channels.resolveId(channel);
     if (!id) throw new DiscordjsError(ErrorCodes.GuildChannelResolve);
@@ -192,6 +192,7 @@ class GuildInviteManager extends CachedManager {
         unique,
         target_user_id: this.client.users.resolveId(targetUser),
         target_application_id: targetApplication?.id ?? targetApplication?.applicationId ?? targetApplication,
+        role_ids: roles?.map(role => this.guild.roles.resolveId(role)),
         target_type: targetType,
       },
       reason,

@@ -1,10 +1,12 @@
 'use strict';
 
+const { Collection } = require('@discordjs/collection');
 const { RouteBases, Routes, PermissionFlagsBits } = require('discord-api-types/v10');
 const Base = require('./Base');
 const { GuildScheduledEvent } = require('./GuildScheduledEvent');
 const IntegrationApplication = require('./IntegrationApplication');
 const InviteStageInstance = require('./InviteStageInstance');
+const { Role } = require('./Role.js');
 const { DiscordjsError, ErrorCodes } = require('../errors');
 const { InviteFlagsBitField } = require('../util/InviteFlagsBitField.js');
 
@@ -234,6 +236,24 @@ class Invite extends Base {
     } else {
       this.flags ??= new InviteFlagsBitField().freeze();
     }
+
+    if ('roles' in data) {
+      /**
+       * The roles assigned to the user upon accepting the invite.
+       *
+       * @type {Collection|null}
+       */
+      this.roles = new Collection(data.roles.map(role => [role.id, new Role(this.client, role, this.guild)]));
+    } else if ('role_ids' in data && data.role_ids && this.guild) {
+      const roles = [];
+      for (const id of data.role_ids) {
+        const role = this.guild.roles.cache.get(id);
+        if (role) roles.push([id, role]);
+      }
+      this.roles = new Collection(roles);
+    } else {
+      this.roles ??= null;
+    }
   }
 
   /**
@@ -330,6 +350,7 @@ class Invite extends Base {
       channel: 'channelId',
       inviter: 'inviterId',
       guild: 'guildId',
+      roles: 'roles',
     });
   }
 

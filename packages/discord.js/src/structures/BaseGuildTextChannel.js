@@ -147,6 +147,7 @@ class BaseGuildTextChannel extends GuildChannel {
    * required if `targetType` is {@link InviteTargetType.Stream}, the application must have the
    * {@link InviteTargetType.EmbeddedApplication} flag
    * @property {InviteTargetType} [targetType] The type of the target for this voice channel invite
+   * @property {RoleResolvable[]} [roles] The roles in the guild given to users that accept this invite
    * @property {string} [reason] The reason for creating the invite
    */
 
